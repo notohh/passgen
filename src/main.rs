@@ -15,7 +15,7 @@ fn main() -> Result<(), Error> {
 
     if args.write_to_file {
         let f = &mut File::create(args.file);
-        let file = match f {
+        let _file = match f {
             Ok(file) => file.write_all(string_output.as_bytes()),
             Err(e) => panic!("cannot create file: {:?}", e),
         };
