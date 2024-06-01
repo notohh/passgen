@@ -1,5 +1,6 @@
 use clap::Parser;
-use rand::{distributions::Alphanumeric, Rng};
+use rand::Rng;
+use std::iter;
 
 use crate::Args;
 
@@ -8,12 +9,14 @@ pub struct RandomString;
 
 impl RandomString {
     pub fn generate_string(&self) -> String {
+        const CHARSET: &[u8] =
+            b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
         let args = Args::parse();
-        let s: String = rand::thread_rng()
-            .sample_iter(&Alphanumeric)
-            .take(args.length)
-            .map(char::from)
-            .collect();
+        let mut rng = rand::thread_rng();
+        let char = || CHARSET[rng.gen_range(0..CHARSET.len())] as char;
+
+        let s: String = iter::repeat_with(char).take(args.length).collect();
+
         s
     }
 }
