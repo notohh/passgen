@@ -20,6 +20,26 @@
         overlays = [fenix.overlays.default];
       });
   in {
+    packages = eachSystem (system: let
+      pkgs = nixpkgs.legacyPackages.${system};
+      inherit ((builtins.fromTOML (builtins.readFile ./Cargo.toml)).package) version;
+    in {
+      default = pkgsFor.${system}.rustPlatform.buildRustPackage {
+        pname = "passgen";
+        version = "${version}";
+
+        src = self;
+
+        cargoLock = {
+          lockFile = ./Cargo.lock;
+        };
+
+        nativeBuildInputs = with pkgs; [pkg-config];
+        buildInputs = with pkgs; [openssl];
+
+        doCheck = false;
+      };
+    });
     checks = eachSystem (system: {
       pre-commit-check = pre-commit-hooks.lib.${system}.run {
         src = ./.;
