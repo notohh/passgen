@@ -2,7 +2,7 @@ use clap::Parser;
 
 #[derive(Parser, Debug)]
 pub struct Args {
-    #[arg(short)]
+    #[arg(short, default_value_t = 16)]
     pub length: usize,
     #[arg(short)]
     pub write_to_file: bool,
