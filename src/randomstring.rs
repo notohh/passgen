@@ -1,5 +1,5 @@
 use clap::Parser;
-use rand::Rng;
+use rand::{distributions::Alphanumeric, Rng};
 use std::iter;
 
 use crate::Args;
@@ -15,8 +15,16 @@ impl RandomString {
         let mut rng = rand::thread_rng();
         let char = || CHARSET[rng.gen_range(0..CHARSET.len())] as char;
 
-        let s: String = iter::repeat_with(char).take(args.length).collect();
-
-        s
+        if args.symbols {
+            let s: String = iter::repeat_with(char).take(args.length).collect();
+            s
+        } else {
+            let s: String = rng
+                .sample_iter(&Alphanumeric)
+                .take(args.length)
+                .map(char::from)
+                .collect();
+            s
+        }
     }
 }
