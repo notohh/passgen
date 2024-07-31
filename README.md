@@ -1,7 +1,6 @@
 # passgen
 
-password generator in rust
-am practacing
+password generator in rust, for general practice.
 
 ## features?
 generate strong passwords
